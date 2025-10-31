@@ -1,0 +1,8 @@
+{
+  "id": "cmpexp",
+  "name": "Component Exporter",
+  "modes": [
+    "canvas"
+  ],
+  "icon": "/icon.svg"
+}
