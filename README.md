@@ -21,7 +21,7 @@ Supports:
 ### 1. Install Dependencies
 
 ```bash
-cd /Users/huy/CODES/nqh/apps/scheemer/framer-plugin
+cd framer-plugin
 npm install
 ```
 
@@ -125,11 +125,15 @@ apps/scheemer/
 
 ## Contributing
 
-This is part of the NQH monorepo. All changes must follow:
-- Constitutional principles (`.specify/memory/constitution.md`)
-- Pre-commit hooks (`pnpm pre-commit`)
-- Evidence-based completion (file:line references required)
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## License
 
-MIT
+MIT - See [LICENSE](LICENSE) file for details

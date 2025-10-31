@@ -7,7 +7,6 @@ Framer Plugin for extracting component metadata and structure as JSON files.
 ### 1. Install Dependencies
 
 ```bash
-cd /Users/huy/CODES/nqh/apps/scheemer/framer-plugin
 npm install
 ```
 
@@ -347,11 +346,8 @@ npm run dev
 
 ## Contributing
 
-Part of the NQH monorepo. Follow:
-- Constitutional principles (`.specify/memory/constitution.md`)
-- Pre-commit hooks (`pnpm pre-commit`)
-- Evidence-based completion (file:line references)
+See [CONTRIBUTING.md](../CONTRIBUTING.md) in the root directory.
 
 ## License
 
-MIT
+MIT - See [LICENSE](../LICENSE) file for details

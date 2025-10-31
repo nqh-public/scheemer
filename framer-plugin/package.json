@@ -1,8 +1,28 @@
 {
   "name": "@scheemer/framer-plugin",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Framer Plugin for exporting component metadata and structure as JSON",
   "type": "module",
+  "author": "Scheemer Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nqh-public/scheemer.git",
+    "directory": "framer-plugin"
+  },
+  "homepage": "https://github.com/nqh-public/scheemer#readme",
+  "bugs": {
+    "url": "https://github.com/nqh-public/scheemer/issues"
+  },
+  "keywords": [
+    "framer",
+    "framer-plugin",
+    "component-export",
+    "design-tools",
+    "json-export",
+    "metadata"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
