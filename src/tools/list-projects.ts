@@ -7,7 +7,7 @@
  */
 
 import { z } from 'zod'
-import { FramerAPIClient } from '@/framer-export/src/framer-cdn/api-client.js'
+import { FramerAPIClient } from '../framer-cdn/api-client.js'
 
 export const ListProjectsSchema = z.object({
   projectUrl: z.string().describe(

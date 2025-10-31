@@ -2,7 +2,7 @@
 
 **Purpose**: Extract component metadata from Framer projects for use with the MCP server.
 
-**Location**: `apps/framer-export/framer-plugin/`
+**Location**: `apps/scheemer/framer-plugin/`
 
 ---
 
@@ -44,7 +44,7 @@
 ### 1. Navigate to Plugin Directory
 
 ```bash
-cd /Users/huy/CODES/nqh/apps/framer-export/framer-plugin
+cd /Users/huy/CODES/nqh/apps/scheemer/framer-plugin
 ```
 
 ### 2. Install Dependencies (Already Done)

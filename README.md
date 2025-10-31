@@ -1,4 +1,4 @@
-# Framer Export MCP Server
+# Scheemer MCP Server
 
 Model Context Protocol server for exporting Framer components from published sites.
 
@@ -30,7 +30,7 @@ This MCP server enables Claude to export React components from Framer sites by a
 ### 1. Install Dependencies
 
 ```bash
-cd apps/framer-export
+cd apps/scheemer
 npm install
 ```
 
@@ -68,9 +68,9 @@ Add to `~/.claude.json`:
 ```json
 {
   "mcpServers": {
-    "framer-export": {
+    "scheemer": {
       "command": "node",
-      "args": ["/Users/huy/CODES/nqh/apps/framer-export/dist/index.js"],
+      "args": ["/Users/huy/CODES/nqh/apps/scheemer/dist/index.js"],
       "env": {
         "FRAMER_ACCESS_TOKEN": "your-token-here"
       }
@@ -118,7 +118,7 @@ Exports all components to a local directory.
 **Example**:
 
 ```
-Export components from https://nailsbystella.hu to /tmp/framer-export/nails-by-stella
+Export components from https://nailsbystella.hu to /tmp/scheemer/nails-by-stella
 Project ID: Nails-By-Stella-Explore--Vn2I8BJCNgyby16NocWM-75A2w
 ```
 
@@ -130,7 +130,7 @@ Project ID: Nails-By-Stella-Explore--Vn2I8BJCNgyby16NocWM-75A2w
 
 **Output structure**:
 ```
-/tmp/framer-export/nails-by-stella/
+/tmp/scheemer/nails-by-stella/
 ├── original/
 │   ├── Text_Opacity_Words.tsx
 │   ├── DateConverter.tsx
@@ -226,7 +226,7 @@ echo '{"method":"tools/list","params":{}}' | node dist/index.js
 ### Project Structure
 
 ```
-apps/framer-export/
+apps/scheemer/
 ├── src/
 │   ├── index.ts              # MCP server entry point
 │   ├── tools/                # 3 MCP tools

@@ -28,14 +28,14 @@ GET https://framerusercontent.com/modules/{moduleId}/{versionId}/dependencies.js
 
 ## Tool Architecture
 
-### CLI Tool: `framer-export`
+### CLI Tool: `scheemer`
 
 **Input**: Framer project URL or ID
-**Output**: `/tmp/framer-export/{projectName}/`
+**Output**: `/tmp/scheemer/{projectName}/`
 
 **Structure**:
 ```
-framer-export/
+scheemer/
 ├── src/
 │   ├── fetch-project.ts      # Get project metadata
 │   ├── download-components.ts # Download from CDN
@@ -58,13 +58,13 @@ framer-export/
 
 ```bash
 # From project URL
-npx framer-export https://framer.com/projects/Nails-By-Stella--Vn2I8BJCNgyby16NocWM
+npx scheemer https://framer.com/projects/Nails-By-Stella--Vn2I8BJCNgyby16NocWM
 
 # From published site
-npx framer-export https://nailsbystella.hu
+npx scheemer https://nailsbystella.hu
 
 # Output
-Exported 23 components to /tmp/framer-export/nails-by-stella/
+Exported 23 components to /tmp/scheemer/nails-by-stella/
 ```
 
 ## Known Limitations

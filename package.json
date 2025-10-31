@@ -1,5 +1,5 @@
 {
-  "name": "framer-export-mcp",
+  "name": "scheemer-mcp",
   "version": "0.1.0",
   "description": "MCP server for exporting Framer components from published sites",
   "type": "module",

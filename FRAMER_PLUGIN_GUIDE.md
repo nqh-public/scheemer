@@ -140,7 +140,7 @@ Framer Editor
 
 **Step 1: Initialize plugin**:
 ```bash
-cd apps/framer-export
+cd apps/scheemer
 npm create framer-plugin@latest -- --name framer-component-exporter
 ```
 
@@ -261,7 +261,7 @@ await fetch('http://localhost:3000/api/components', {
 ### 1. Create Plugin
 
 ```bash
-cd /Users/huy/CODES/nqh/apps/framer-export
+cd /Users/huy/CODES/nqh/apps/scheemer
 npm create framer-plugin@latest
 # Name: framer-component-exporter
 # Mode: canvas

@@ -62,7 +62,7 @@ export const toolDefinitions = [
           type: 'string',
           description:
             'Local directory path where components will be exported. ' +
-            'Example: "/tmp/framer-export/my-project"',
+            'Example: "/tmp/scheemer/my-project"',
         },
         accessToken: {
           type: 'string',

@@ -44,7 +44,7 @@ import {
 // Create MCP server
 const server = new Server(
   {
-    name: 'framer-export',
+    name: 'scheemer',
     version: '0.1.0',
   },
   {

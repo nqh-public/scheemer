@@ -1,4 +1,4 @@
-# Framer Export MCP Server - Project Status
+# Scheemer MCP Server - Project Status
 
 **Date**: 2025-10-30
 **Status**: ✅ Partially Functional (CDN component fetching works, project metadata requires auth)
@@ -197,7 +197,7 @@ https://framerusercontent.com/modules/d1ehLL49zcOS4jydhHmS/BYaOqW3IYH3Gl5osfUm1/
 ## Files Created
 
 ```
-apps/framer-export/
+apps/scheemer/
 ├── package.json ✅
 ├── tsconfig.json ✅
 ├── .env.example ✅
@@ -233,9 +233,9 @@ apps/framer-export/
 ```json
 {
   "mcpServers": {
-    "framer_export": {
+    "scheemer": {
       "command": "node",
-      "args": ["/Users/huy/CODES/nqh/apps/framer-export/dist/index.js"],
+      "args": ["/Users/huy/CODES/nqh/apps/scheemer/dist/index.js"],
       "env": {
         "FRAMER_ACCESS_TOKEN": "not-needed-for-cdn-access"
       }

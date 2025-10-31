@@ -9,9 +9,9 @@
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { z } from 'zod'
-import { FramerAPIClient } from '@/framer-export/src/framer-cdn/api-client.js'
-import { ComponentDownloader } from '@/framer-export/src/framer-cdn/download.js'
-import type { ExportResult } from '@/framer-export/src/framer-cdn/types.js'
+import { FramerAPIClient } from '../framer-cdn/api-client.js'
+import { ComponentDownloader } from '../framer-cdn/download.js'
+import type { ExportResult } from '../framer-cdn/types.js'
 
 const JSON_INDENT = 2
 
@@ -27,7 +27,7 @@ export const ExportComponentsSchema = z.object({
   ),
   outputPath: z.string().describe(
     'Local directory path where components will be exported. ' +
-    'Example: "/tmp/framer-export/my-project"'
+    'Example: "/tmp/scheemer/my-project"'
   ),
   accessToken: z.string().optional().describe(
     'Framer access token (optional if FRAMER_ACCESS_TOKEN env var is set). ' +
