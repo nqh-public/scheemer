@@ -1,27 +1,15 @@
 /**
- * Framer Component Exporter Plugin
+ * @what Framer plugin for extracting component metadata and exporting as JSON
+ * @why Enable structured data export from Framer designs for analysis and documentation
+ * @props None - root component manages internal state
  */
-
+/* eslint-disable max-lines, tailwindcss/no-custom-classname */
 import { framer } from "framer-plugin"
 import { useState, useEffect } from "react"
 import { Button } from "./components/Button"
 import { Checkbox } from "./components/Checkbox"
 import { ScrollArea } from "./components/ScrollArea"
-
-interface ExportItem {
-    id: string
-    name: string
-    type: "frame" | "component-instance" | "component-master"
-    nodeType: string // __class from Framer API
-    structure: any
-    properties: Record<string, any>
-    componentInfo?: {
-        identifier: string
-        insertURL: string | null
-        componentName: string | null
-        controls?: Record<string, unknown> // Only for instances
-    }
-}
+import type { FramerNode, ExportItem } from "./types"
 
 // Inline SVG icons (from Lucide)
 const Icon = ({ children, size = 16 }: { children: React.ReactNode, size?: number }) => (
@@ -102,6 +90,7 @@ export function App() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         framer.showUI({
@@ -123,8 +112,9 @@ export function App() {
         }
     }, [])
 
-    const updateItemsFromSelection = async (selection: any[]) => {
+    const updateItemsFromSelection = async (selection: unknown[]) => {
         try {
+            setError(null)
             const allItems: ExportItem[] = []
 
             // Check if we're inside a component editing mode
@@ -132,16 +122,17 @@ export function App() {
             const isInComponentMode = canvasRoot.__class === "ComponentNode"
 
             // Helper to serialize gradient
-            const serializeGradient = (gradient: any) => {
+            const serializeGradient = (gradient: unknown) => {
                 if (!gradient) return null
+                const g = gradient as Record<string, unknown>
                 return {
-                    type: gradient.__class,
-                    angle: gradient.angle,
-                    x: gradient.x,
-                    y: gradient.y,
-                    width: gradient.width,
-                    height: gradient.height,
-                    stops: gradient.stops?.map((stop: any) => ({
+                    type: g.__class,
+                    angle: g.angle,
+                    x: g.x,
+                    y: g.y,
+                    width: g.width,
+                    height: g.height,
+                    stops: (g.stops as Array<Record<string, unknown>>)?.map((stop) => ({
                         color: stop.color,
                         position: stop.position,
                     })) || [],
@@ -149,9 +140,10 @@ export function App() {
             }
 
             // Recursively extract children
-            const extractChildren = async (nodes: any[]): Promise<any[]> => {
+            const extractChildren = async (nodes: unknown[]): Promise<unknown[]> => {
                 return await Promise.all(
-                    nodes.map(async (child) => {
+                    nodes.map(async (rawChild) => {
+                        const child = rawChild as FramerNode
                         const childChildren = await child.getChildren()
                         return {
                             id: child.id,
@@ -159,22 +151,22 @@ export function App() {
                             type: child.__class,
                             visible: child.visible,
                             locked: child.locked,
-                            x: (child as any).x,
-                            y: (child as any).y,
-                            width: (child as any).width,
-                            height: (child as any).height,
+                            x: child.x,
+                            y: child.y,
+                            width: child.width,
+                            height: child.height,
                             rotation: child.rotation,
                             opacity: child.opacity,
-                            backgroundColor: (child as any).backgroundColor,
-                            backgroundImage: (child as any).backgroundImage,
-                            backgroundGradient: serializeGradient((child as any).backgroundGradient),
-                            borderRadius: (child as any).borderRadius,
-                            text: (child as any).text,
-                            fontSize: (child as any).fontSize,
-                            fontFamily: (child as any).fontFamily,
-                            fontWeight: (child as any).fontWeight,
-                            textAlign: (child as any).textAlign,
-                            color: (child as any).color,
+                            backgroundColor: child.backgroundColor,
+                            backgroundImage: child.backgroundImage,
+                            backgroundGradient: serializeGradient(child.backgroundGradient),
+                            borderRadius: child.borderRadius,
+                            text: child.text,
+                            fontSize: child.fontSize,
+                            fontFamily: child.fontFamily,
+                            fontWeight: child.fontWeight,
+                            textAlign: child.textAlign,
+                            color: child.color,
                             children: childChildren.length > 0 ? await extractChildren(childChildren) : [],
                         }
                     })
@@ -186,25 +178,26 @@ export function App() {
                 const componentChildren = await canvasRoot.getChildren()
                 const componentChildrenData = componentChildren.length > 0 ? await extractChildren(componentChildren) : []
 
+                const root = canvasRoot as unknown as FramerNode
                 allItems.push({
-                    id: `component-master-${canvasRoot.id}`,
-                    name: canvasRoot.name || "Unnamed Component",
+                    id: `component-master-${root.id}`,
+                    name: root.name || "Unnamed Component",
                     type: "component-master" as const,
                     nodeType: "ComponentNode",
                     structure: {
-                        id: canvasRoot.id,
-                        name: canvasRoot.name,
+                        id: root.id,
+                        name: root.name,
                         type: "ComponentNode",
-                        visible: (canvasRoot as any).visible,
-                        locked: (canvasRoot as any).locked,
+                        visible: root.visible,
+                        locked: root.locked,
                         childrenCount: componentChildren.length,
                         children: componentChildrenData,
                     },
                     properties: {},
                     componentInfo: {
-                        identifier: (canvasRoot as any).componentIdentifier,
-                        insertURL: (canvasRoot as any).insertURL,
-                        componentName: (canvasRoot as any).componentName,
+                        identifier: root.componentIdentifier,
+                        insertURL: root.insertURL,
+                        componentName: root.componentName,
                     },
                 })
             }
@@ -212,7 +205,8 @@ export function App() {
             // Only add selected frames/components (exclude code components)
             if (selection.length > 0) {
                 const items: ExportItem[] = await Promise.all(
-                    selection.map(async (node) => {
+                    selection.map(async (rawNode) => {
+                        const node = rawNode as unknown as FramerNode
                         const nodeClass = node.__class
                         const children = await node.getChildren()
                         const childrenData = children.length > 0 ? await extractChildren(children) : []
@@ -220,68 +214,68 @@ export function App() {
                         // Base properties common to all nodes
                         const baseProperties = {
                             // Position & Size
-                            x: (node as any).x,
-                            y: (node as any).y,
-                            width: (node as any).width,
-                            height: (node as any).height,
+                            x: node.x,
+                            y: node.y,
+                            width: node.width,
+                            height: node.height,
                             rotation: node.rotation,
 
                             // Visual
                             opacity: node.opacity,
-                            backgroundColor: (node as any).backgroundColor,
-                            backgroundImage: (node as any).backgroundImage,
-                            backgroundGradient: serializeGradient((node as any).backgroundGradient),
+                            backgroundColor: node.backgroundColor,
+                            backgroundImage: node.backgroundImage,
+                            backgroundGradient: serializeGradient(node.backgroundGradient),
 
                             // Border
-                            borderRadius: (node as any).borderRadius,
-                            borderColor: (node as any).borderColor,
-                            borderWidth: (node as any).borderWidth,
-                            borderStyle: (node as any).borderStyle,
+                            borderRadius: node.borderRadius,
+                            borderColor: node.borderColor,
+                            borderWidth: node.borderWidth,
+                            borderStyle: node.borderStyle,
 
                             // Layout
-                            layoutType: (node as any).layoutType,
-                            gap: (node as any).gap,
-                            padding: (node as any).padding,
-                            paddingTop: (node as any).paddingTop,
-                            paddingRight: (node as any).paddingRight,
-                            paddingBottom: (node as any).paddingBottom,
-                            paddingLeft: (node as any).paddingLeft,
-                            alignItems: (node as any).alignItems,
-                            justifyContent: (node as any).justifyContent,
-                            flexDirection: (node as any).flexDirection,
-                            flexWrap: (node as any).flexWrap,
+                            layoutType: node.layoutType,
+                            gap: node.gap,
+                            padding: node.padding,
+                            paddingTop: node.paddingTop,
+                            paddingRight: node.paddingRight,
+                            paddingBottom: node.paddingBottom,
+                            paddingLeft: node.paddingLeft,
+                            alignItems: node.alignItems,
+                            justifyContent: node.justifyContent,
+                            flexDirection: node.flexDirection,
+                            flexWrap: node.flexWrap,
 
                             // Text (if TextNode)
-                            text: (node as any).text,
-                            fontSize: (node as any).fontSize,
-                            fontFamily: (node as any).fontFamily,
-                            fontWeight: (node as any).fontWeight,
-                            textAlign: (node as any).textAlign,
-                            color: (node as any).color,
-                            lineHeight: (node as any).lineHeight,
-                            letterSpacing: (node as any).letterSpacing,
+                            text: node.text,
+                            fontSize: node.fontSize,
+                            fontFamily: node.fontFamily,
+                            fontWeight: node.fontWeight,
+                            textAlign: node.textAlign,
+                            color: node.color,
+                            lineHeight: node.lineHeight,
+                            letterSpacing: node.letterSpacing,
 
                             // Effects
-                            shadow: (node as any).shadow,
-                            blur: (node as any).blur,
+                            shadow: node.shadow,
+                            blur: node.blur,
 
                             // Link
-                            link: (node as any).link,
+                            link: node.link,
 
                             // Constraints
-                            aspectRatio: (node as any).aspectRatio,
-                            minWidth: (node as any).minWidth,
-                            maxWidth: (node as any).maxWidth,
-                            minHeight: (node as any).minHeight,
-                            maxHeight: (node as any).maxHeight,
+                            aspectRatio: node.aspectRatio,
+                            minWidth: node.minWidth,
+                            maxWidth: node.maxWidth,
+                            minHeight: node.minHeight,
+                            maxHeight: node.maxHeight,
 
                             // Pins (positioning constraints)
-                            top: (node as any).top,
-                            right: (node as any).right,
-                            bottom: (node as any).bottom,
-                            left: (node as any).left,
-                            centerX: (node as any).centerX,
-                            centerY: (node as any).centerY,
+                            top: node.top,
+                            right: node.right,
+                            bottom: node.bottom,
+                            left: node.left,
+                            centerX: node.centerX,
+                            centerY: node.centerY,
                         }
 
                         // Check if this is a ComponentNode (master definition)
@@ -304,9 +298,9 @@ export function App() {
                                     // ComponentNode doesn't have visual properties, only structure
                                 },
                                 componentInfo: {
-                                    identifier: (node as any).componentIdentifier,
-                                    insertURL: (node as any).insertURL,
-                                    componentName: (node as any).componentName,
+                                    identifier: node.componentIdentifier,
+                                    insertURL: node.insertURL,
+                                    componentName: node.componentName,
                                 },
                             }
                         }
@@ -329,10 +323,10 @@ export function App() {
                                 },
                                 properties: baseProperties,
                                 componentInfo: {
-                                    identifier: (node as any).componentIdentifier,
-                                    insertURL: (node as any).insertURL,
-                                    componentName: (node as any).componentName,
-                                    controls: (node as any).controls || {},
+                                    identifier: node.componentIdentifier,
+                                    insertURL: node.insertURL,
+                                    componentName: node.componentName,
+                                    controls: {},
                                 },
                             }
                         }
@@ -363,7 +357,8 @@ export function App() {
 
             // Update message based on context
             if (isInComponentMode) {
-                const componentName = (canvasRoot as any).componentName || "Component"
+                const root = canvasRoot as unknown as FramerNode
+                const componentName = root.componentName || "Component"
                 if (selection.length === 0) {
                     setMessage(`${componentName} master + select variants/frames`)
                 } else {
@@ -374,8 +369,9 @@ export function App() {
             } else {
                 setMessage(`${selection.length} item(s) selected`)
             }
-        } catch (error) {
-            console.error("Error updating items:", error)
+        } catch (err) {
+            console.error("Error updating items:", err)
+            setError(err instanceof Error ? err.message : "Failed to load items")
         }
     }
 
@@ -416,7 +412,7 @@ export function App() {
         }
 
         selectedItems.forEach(item => {
-            const exportData: any = {
+            const exportData: Record<string, unknown> = {
                 name: item.name,
                 type: item.type,
                 nodeType: item.nodeType,
@@ -430,7 +426,8 @@ export function App() {
             }
 
             const content = JSON.stringify(exportData, null, 2)
-            const filename = `${item.name}.json`
+            const sanitizedName = (item.name ?? 'unnamed').replace(/[^a-z0-9_-]/gi, '_')
+            const filename = `${sanitizedName}.json`
 
             const blob = new Blob([content], { type: "application/json" })
             const url = URL.createObjectURL(blob)
@@ -466,8 +463,16 @@ export function App() {
                 </Button>
             </header>
 
+            {/* Error bar */}
+            {error && (
+                <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-200 flex-shrink-0 flex items-center justify-between">
+                    <span>{error}</span>
+                    <button onClick={() => setError(null)} className="text-red-800 hover:text-red-900">✕</button>
+                </div>
+            )}
+
             {/* Message bar */}
-            {message && (
+            {message && !error && (
                 <div className="px-3 py-2 text-xs text-framer-text-secondary bg-framer-bg-secondary border-b border-framer-divider flex-shrink-0">
                     {message}
                 </div>
@@ -509,7 +514,7 @@ export function App() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-1.5 mb-0.5">
                                         <strong className="text-sm font-medium overflow-hidden text-ellipsis whitespace-nowrap">
-                                            {item.name}
+                                            {item.name ?? "Unnamed"}
                                         </strong>
                                         {item.type !== "frame" && (
                                             <span className="text-[9px] px-1.5 py-0.5 rounded-sm bg-framer-tint text-white font-semibold uppercase shrink-0">
@@ -518,11 +523,11 @@ export function App() {
                                         )}
                                     </div>
                                     <div className="text-xs text-framer-text-tertiary">
-                                        {item.componentInfo?.componentName && (
+                                        {typeof item.componentInfo?.componentName === 'string' && (
                                             <span>{item.componentInfo.componentName} • </span>
                                         )}
-                                        {item.structure.childrenCount} children
-                                        {item.type !== "component-master" && item.properties?.width && (
+                                        <span>{typeof item.structure.childrenCount === 'number' ? item.structure.childrenCount : 0} children</span>
+                                        {item.type !== "component-master" && typeof item.properties?.width === 'number' && typeof item.properties?.height === 'number' && (
                                             <span> • {Math.round(item.properties.width)}×{Math.round(item.properties.height)}px</span>
                                         )}
                                     </div>
