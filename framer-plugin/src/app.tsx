@@ -138,9 +138,10 @@ export function App() {
             }
 
             // Recursively extract children
-            const extractChildren = async (nodes: FramerNode[]): Promise<unknown[]> => {
+            const extractChildren = async (nodes: unknown[]): Promise<unknown[]> => {
                 return await Promise.all(
-                    nodes.map(async (child) => {
+                    nodes.map(async (rawChild) => {
+                        const child = rawChild as FramerNode
                         const childChildren = await child.getChildren()
                         return {
                             id: child.id,
@@ -423,7 +424,7 @@ export function App() {
             }
 
             const content = JSON.stringify(exportData, null, 2)
-            const sanitizedName = item.name.replace(/[^a-z0-9_-]/gi, '_')
+            const sanitizedName = (item.name ?? 'unnamed').replace(/[^a-z0-9_-]/gi, '_')
             const filename = `${sanitizedName}.json`
 
             const blob = new Blob([content], { type: "application/json" })
@@ -511,7 +512,7 @@ export function App() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-1.5 mb-0.5">
                                         <strong className="text-sm font-medium overflow-hidden text-ellipsis whitespace-nowrap">
-                                            {item.name}
+                                            {item.name ?? "Unnamed"}
                                         </strong>
                                         {item.type !== "frame" && (
                                             <span className="text-[9px] px-1.5 py-0.5 rounded-sm bg-framer-tint text-white font-semibold uppercase shrink-0">
@@ -520,11 +521,11 @@ export function App() {
                                         )}
                                     </div>
                                     <div className="text-xs text-framer-text-tertiary">
-                                        {item.componentInfo?.componentName && (
+                                        {typeof item.componentInfo?.componentName === 'string' && (
                                             <span>{item.componentInfo.componentName} • </span>
                                         )}
-                                        {item.structure.childrenCount} children
-                                        {item.type !== "component-master" && item.properties?.width && (
+                                        <span>{typeof item.structure.childrenCount === 'number' ? item.structure.childrenCount : 0} children</span>
+                                        {item.type !== "component-master" && typeof item.properties?.width === 'number' && typeof item.properties?.height === 'number' && (
                                             <span> • {Math.round(item.properties.width)}×{Math.round(item.properties.height)}px</span>
                                         )}
                                     </div>

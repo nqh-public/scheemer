@@ -1,7 +1,7 @@
 // Simple types for Framer nodes
 export interface FramerNode {
   id: string
-  name: string
+  name: string | null
   __class: string
   visible: boolean
   locked: boolean
@@ -59,7 +59,7 @@ export interface FramerNode {
 
 export interface ExportItem {
   id: string
-  name: string
+  name: string | null
   type: "frame" | "component-instance" | "component-master"
   nodeType: string
   structure: Record<string, unknown>
