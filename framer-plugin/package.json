@@ -29,7 +29,8 @@
     "test": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "pack": "npx framer-plugin-tools@latest pack"
+    "pack": "npx framer-plugin-tools@latest pack",
+    "prepare": "husky"
   },
   "dependencies": {
     "framer-plugin": "^3",
@@ -50,13 +51,27 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.1.0",
+    "jsinspect": "^0.12.7",
+    "lint-staged": "^16.2.6",
+    "madge": "^8.0.0",
     "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^6",
     "vite-plugin-framer": "^1",
     "vitest": "^4.0.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }
