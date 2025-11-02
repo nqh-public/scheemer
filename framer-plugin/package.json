@@ -26,6 +26,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "vitest",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "pack": "npx framer-plugin-tools@latest pack"
@@ -38,6 +39,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^4.3.1",
@@ -47,11 +50,13 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "jsdom": "^27.1.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^6",
-    "vite-plugin-framer": "^1"
+    "vite-plugin-framer": "^1",
+    "vitest": "^4.0.6"
   }
 }
