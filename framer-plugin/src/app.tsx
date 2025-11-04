@@ -3,7 +3,6 @@
  * @why Enable structured data export from Framer designs for analysis and documentation
  * @props None - root component manages internal state
  */
-/* eslint-disable max-lines, tailwindcss/no-custom-classname */
 import { framer } from "framer-plugin"
 import { useState, useEffect } from "react"
 import { Button } from "./components/Button"

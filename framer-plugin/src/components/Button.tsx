@@ -1,5 +1,7 @@
 /**
- * Button - Simplified version from @nqh/hui for Framer plugin
+ * @what Button component for Framer plugin UI
+ * @why Provides consistent, Framer-styled buttons matching native design tokens
+ * @props variant (default|ghost|outline), size (default|sm|icon), fullWidth, ...HTMLButtonProps
  */
 
 import * as React from "react"
