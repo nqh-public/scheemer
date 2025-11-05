@@ -1,5 +1,7 @@
 /**
- * Checkbox - Simplified version from @nqh/hui for Framer plugin
+ * @what Checkbox component for Framer plugin UI
+ * @why Provides accessible, Framer-styled checkboxes for item selection
+ * @props onCheckedChange (boolean callback), ...HTMLInputProps (except type)
  */
 
 import * as React from "react"

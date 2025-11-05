@@ -1,3 +1,9 @@
+/**
+ * @what TypeScript type definitions for Framer plugin data structures
+ * @why Provides type safety for Framer node properties and export data format
+ * @exports FramerNode (Framer Canvas API node interface), ExportItem (JSON export structure)
+ */
+
 // Simple types for Framer nodes
 export interface FramerNode {
   id: string

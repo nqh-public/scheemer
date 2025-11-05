@@ -1,5 +1,7 @@
 /**
- * ScrollArea - Simplified scroll container for Framer plugin
+ * @what ScrollArea component for vertically scrollable content
+ * @why Provides consistent scrolling behavior with Framer-styled scrollbars
+ * @props children (React nodes), ...HTMLDivProps
  */
 
 import * as React from "react"
