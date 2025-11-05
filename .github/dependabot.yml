@@ -1,8 +1,8 @@
 version: 2
 updates:
-  # Root directory (covers framer-plugin workspace)
-  - package-ecosystem: "npm"
-    directory: "/"
+  # Framer plugin directory (pnpm-based)
+  - package-ecosystem: "npm"  # Auto-detects pnpm from pnpm-lock.yaml
+    directory: "/framer-plugin"
     schedule:
       interval: "weekly"
       day: "monday"
