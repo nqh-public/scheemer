@@ -1,12 +1,34 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: "npm"  # Keep as "npm" - Dependabot doesn't support "pnpm" ecosystem
     directory: "/framer-plugin"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5  # Reduced from 10 to prevent rate limiting
+
+    # Handle pnpm lock file updates
+    versioning-strategy: increase
+
+    # Ignore major version updates that might break
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+    # Group updates to reduce PR noise
     groups:
       development-dependencies:
         dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
       production-dependencies:
         dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Automatically rebase when conflicts occur
+    rebase-strategy: auto
