@@ -64,7 +64,7 @@
     "typescript-eslint": "^8.0.1",
     "vite": "^6",
     "vite-plugin-framer": "^1",
-    "vitest": "^4.0.6"
+    "vitest": "^4.0.8"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
