@@ -2,7 +2,6 @@
   "name": "@scheemer/framer-plugin",
   "private": true,
   "version": "1.0.0",
-  "packageManager": "pnpm@8.15.1",
   "description": "Framer Plugin for exporting component metadata and structure as JSON",
   "type": "module",
   "author": "Scheemer Contributors",
