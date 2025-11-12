@@ -61,9 +61,9 @@ framer-plugin/
 
 **Run checks**:
 ```bash
-pnpm lint        # ESLint
-pnpm test        # Vitest
-pnpm build       # Vite build
+bun lint        # ESLint
+bun test        # Vitest
+bun build       # Vite build
 ```
 
 ---
@@ -73,23 +73,23 @@ pnpm build       # Vite build
 **Setup**:
 ```bash
 cd framer-plugin
-pnpm install
-pnpm dev         # Start dev server with HMR
+bun install
+bun dev         # Start dev server with HMR
 ```
 
 **Testing**:
 ```bash
-pnpm test              # Run tests
+bun test              # Run tests
 ```
 
 **Build for Framer**:
 ```bash
-pnpm build       # Production build
-pnpm pack        # Package as .framer plugin
+bun build       # Production build
+bun pack        # Package as .framer plugin
 ```
 
 **Install in Framer**:
-1. Build plugin: `pnpm pack`
+1. Build plugin: `bun pack`
 2. Open Framer → Plugins → Install from file
 3. Select generated `.framer` file
 
@@ -225,7 +225,7 @@ it('renders button with text', () => {
 **Update UI component**:
 1. Modify component file (e.g., `components/Button.tsx`)
 2. Write/update test in `button.test.tsx`
-3. Verify in plugin with `pnpm dev`
+3. Verify in plugin with `bun dev`
 
 **Fix export format**:
 1. Locate `exportData` object creation in `app.tsx`
