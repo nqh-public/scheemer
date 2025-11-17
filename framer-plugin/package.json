@@ -52,7 +52,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^15.9.0",
     "husky": "^9.1.7",
-    "jsdom": "^27.1.0",
+    "jsdom": "^27.2.0",
     "jsinspect": "^0.12.7",
     "lint-staged": "^16.2.6",
     "madge": "^8.0.0",
