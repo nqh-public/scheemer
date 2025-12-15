@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "framer-plugin": "^3",
-    "react": "^18",
+    "react": "^19",
     "react-dom": "^18",
     "vite-plugin-mkcert": "^1"
   },
